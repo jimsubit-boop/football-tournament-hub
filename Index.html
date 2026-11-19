@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ফুটবল টুর্নামেন্ট হোস্টিং প্ল্যাটফর্ম</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* থিম ১: পুরো ওয়েবসাইটের মূল ব্যাকগ্রাউন্ড (পতাকার ওপর ফুটবল - জুম আউট ও দৃশ্যমান পজিশন) */
+        body {
+            background-color: #03130e;
+            background-image: linear-gradient(rgba(2, 10, 7, 0.28), rgba(2, 10, 7, 0.35)),
+                              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid meet'%3E%3Cdefs%3E%3ClinearGradient id='flagGreen' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300684b'/%3E%3Cstop offset='50%25' stop-color='%2300523b'/%3E%3Cstop offset='100%25' stop-color='%23003425'/%3E%3C/linearGradient%3E%3CradialGradient id='flagRed' cx='45%25' cy='45%25' r='55%25'%3E%3Cstop offset='0%25' stop-color='%23f42a41'/%3E%3Cstop offset='85%25' stop-color='%23c8162b'/%3E%3Cstop offset='100%25' stop-color='%238c0b1b'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='1600' height='1000' fill='url(%23flagGreen)'/%3E%3Cpath d='M0,190 Q400,110 800,210 T1600,160 L1600,1000 L0,1000 Z' fill='%23000000' fill-opacity='0.18'/%3E%3Cpath d='M0,620 Q450,520 900,640 T1600,570 L1600,1000 L0,1000 Z' fill='%23ffffff' fill-opacity='0.05'/%3E%3Ccircle cx='710' cy='500' r='265' fill='url(%23flagRed)'/%3E%3Cg transform='translate(1160, 560) scale(0.76)'%3E%3Ccircle cx='8' cy='14' r='125' fill='%23000000' opacity='0.45'/%3E%3Ccircle cx='0' cy='0' r='125' fill='%23f8fafc' stroke='%230f172a' stroke-width='5'/%3E%3Cpolygon points='0,-48 45,-15 28,39 -28,39 -45,-15' fill='%230f172a'/%3E%3Cline x1='0' y1='-48' x2='0' y2='-125' stroke='%230f172a' stroke-width='5'/%3E%3Cline x1='45' y1='-15' x2='118' y2='-38' stroke='%230f172a' stroke-width='5'/%3E%3Cline x1='28' y1='39' x2='73' y2='101' stroke='%230f172a' stroke-width='5'/%3E%3Cline x1='-28' y1='39' x2='-73' y2='101' stroke='%230f172a' stroke-width='5'/%3E%3Cline x1='-45' y1='-15' x2='-118' y2='-38' stroke='%230f172a' stroke-width='5'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            color: #ffffff;
+            padding: 15px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            background: rgba(5, 18, 14, 0.82);
+            backdrop-filter: blur(4px);
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.72);
+            border: 2px solid rgba(255, 255, 255, 0.32);
+            margin-bottom: 20px;
+        }
+
+        .top-save-bar {
+            background: rgba(2, 12, 9, 0.9);
+            border: 1px solid #fde047;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+        }
+        h1 { font-size: 24px; color: #fde047; }
+        h2 { font-size: 19px; margin-bottom: 18px; color: #fef08a; }
+
+        p.subtitle {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.85);
+        }
+
+        .btn {
+            width: 100%;
+            background-color: #f42a41;
+            color: #ffffff;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            display: block;
+            margin-top: 15px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+        }
+        .btn:hover { background-color: #ff3b52; transform: translateY(-1px); }
+        .btn-secondary { background-color: #0284c7; }
+        .btn-secondary:hover { background-color: #0ea5e9; }
+        .btn-accent { background-color: #eab308; color: #061410; text-shadow: none; }
+        .btn-accent:hover { background-color: #facc15; }
+        .btn-danger { background-color: #dc2626; padding: 8px 12px; font-size: 13px; border-radius: 6px; border: none; color: #fff; cursor: pointer; font-weight: bold; }
+        .btn-danger:hover { background-color: #ef4444; }
+        .btn-warning { background-color: #d97706; padding: 4px 8px; font-size: 11px; border-radius: 4px; border: none; color: #fff; cursor: pointer; }
+        .btn-warning:hover { background-color: #b45309; }
+        .btn-exit { background-color: #991b1b; margin-top: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); }
+        .btn-exit:hover { background-color: #dc2626; }
+
+        .form-group { margin-bottom: 14px; }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.35);
+            background-color: rgba(2, 12, 9, 0.88);
+            color: #ffffff;
+            font-size: 14px;
+        }
+        input::placeholder, textarea::placeholder { color: #94a3b8; }
+        .hidden { display: none !important; }
+
+        .card-box {
+            background-color: rgba(2, 12, 9, 0.86);
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 4px solid #f42a41;
+            margin-bottom: 15px;
+        }
+        .card-box p { margin-bottom: 6px; font-size: 13px; color: #f8fafc; }
+
+        .share-box {
+            background: rgba(2, 12, 9, 0.88);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #fde047;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .share-link {
+            color: #fde047;
+            font-size: 13px;
+            word-break: break-all;
+            margin: 6px 0;
+            display: block;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .info-text {
+            font-size: 13px;
+            color: #fef08a;
+            text-align: center;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        /* থিম ৩: গ্রুপ স্টেজ, লিগ পয়েন্ট টেবিল ও নকআউট বক্সের ব্যাকগ্রাউন্ড (1971 গ্রাফিক) */
+        .stage-1971-bg,
+        table,
+        .knockout-bracket-box {
+            background-color: #042814;
+            background-image: linear-gradient(rgba(2, 12, 7, 0.72), rgba(2, 12, 7, 0.78)),
+                              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 900' preserveAspectRatio='xMidYMid slice'%3E%3Crect width='600' height='900' fill='%23007a28'/%3E%3Cg stroke='%23001c08' stroke-width='3' opacity='0.55'%3E%3Cline x1='300' y1='450' x2='0' y2='0'/%3E%3Cline x1='300' y1='450' x2='200' y2='0'/%3E%3Cline x1='300' y1='450' x2='420' y2='0'/%3E%3Cline x1='300' y1='450' x2='600' y2='120'/%3E%3Cline x1='300' y1='450' x2='600' y2='450'/%3E%3Cline x1='300' y1='450' x2='600' y2='820'/%3E%3Cline x1='300' y1='450' x2='360' y2='900'/%3E%3Cline x1='300' y1='450' x2='90' y2='900'/%3E%3Cline x1='300' y1='450' x2='0' y2='620'/%3E%3Cline x1='300' y1='450' x2='0' y2='260'/%3E%3C/g%3E%3Cpolygon points='230,170 360,210 430,360 390,620 270,740 175,650 185,410' fill='%23e11d2a' opacity='0.92'/%3E%3Cg transform='rotate(-14 300 455)'%3E%3Ctext x='300' y='505' text-anchor='middle' font-family='Impact, Arial Black, sans-serif' font-style='italic' font-weight='900' font-size='155' fill='%23e2e8f0' stroke='%23090d16' stroke-width='10' paint-order='stroke fill'%3E1971%3C/text%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid rgba(255,255,255,0.28);
+            padding: 8px 5px;
+            text-align: center;
+            font-size: 12px;
+            color: #ffffff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+            font-weight: 600;
+        }
+        th {
+            background-color: rgba(0, 56, 36, 0.88);
+            color: #fde047;
+        }
+        td {
+            background-color: rgba(4, 18, 12, 0.45);
+        }
+        .qualified-row td {
+            background: rgba(225, 29, 42, 0.42);
+        }
+        .group-header {
+            background: rgba(185, 28, 28, 0.92);
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px 6px 0 0;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 15px;
+            border: 1px solid rgba(255,255,255,0.28);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.85);
+        }
+
+        /* থিম ২: ম্যাচ ফিক্সচার কার্ডে জুম-আউট ও পরিষ্কার গ্রাঞ্জ সবুজ-লাল ব্যাকগ্রাউন্ড */
+        .match-card {
+            background-color: #072b19;
+            background-image: linear-gradient(rgba(3, 18, 11, 0.58), rgba(3, 18, 11, 0.65)),
+                              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 180' preserveAspectRatio='xMidYMid slice'%3E%3Crect x='0' y='0' width='260' height='180' fill='%23098548'/%3E%3Crect x='260' y='0' width='380' height='180' fill='%23dc2638'/%3E%3Crect x='640' y='0' width='260' height='180' fill='%23098548'/%3E%3Cg opacity='0.28' fill='%23ffffff'%3E%3Ccircle cx='85' cy='40' r='2'/%3E%3Ccircle cx='170' cy='95' r='2.5'/%3E%3Ccircle cx='230' cy='140' r='2'/%3E%3Ccircle cx='340' cy='50' r='2.5'/%3E%3Ccircle cx='450' cy='110' r='2'/%3E%3Ccircle cx='560' cy='45' r='2.5'/%3E%3Ccircle cx='710' cy='80' r='2'/%3E%3Ccircle cx='810' cy='130' r='2.5'/%3E%3C/g%3E%3Cg opacity='0.22' stroke='%23020c07' stroke-width='2'%3E%3Cline x1='0' y1='35' x2='900' y2='45'/%3E%3Cline x1='0' y1='135' x2='900' y2='125'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 120% 120%;
+            background-position: center;
+            border: 1px solid rgba(253, 224, 71, 0.55);
+            border-radius: 8px;
+            padding: 12px 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+        }
+        .match-team {
+            width: 30%;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
+            font-size: 14px;
+        }
+        .match-team.left { text-align: right; }
+        .match-team.right { text-align: left; }
+        .score-controls { display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
+        .score-input {
+            width: 38px;
+            padding: 4px;
+            text-align: center;
+            background: rgba(2, 12, 9, 0.92);
+            border: 1px solid #fde047;
+            color: #fff;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .save-score-btn {
+            background: #0284c7;
+            color: white;
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+        .save-score-btn:hover { background: #0ea5e9; }
+        .save-score-btn.saved { background: #15803d; }
+
+        .knockout-bracket-box {
+            border: 2px solid #fde047;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .bracket-tree-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        .bracket-round-col {
+            flex: 1;
+            min-width: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            gap: 15px;
+        }
+        .bracket-match-node {
+            background: rgba(4, 18, 12, 0.78);
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* নকআউট পর্বে ১টি প্লেয়ার গ্রুপ বক্স */
+        .single-ko-group-box {
+            background: rgba(2, 12, 9, 0.92);
+            border: 2px solid #fde047;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 18px;
+        }
+        .ko-player-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .ko-player-item {
+            background: rgba(0, 104, 75, 0.45);
+            border: 1px solid rgba(253, 224, 71, 0.45);
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .ko-player-item.active-ko {
+            background: rgba(244, 42, 65, 0.55);
+            border-color: #fde047;
+            color: #fde047;
+        }
+
+        #drawAnimationOverlay {
+            text-align: center;
+            padding: 25px 15px;
+            background: rgba(2, 12, 9, 0.92);
+            border: 2px solid #fde047;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        .group-letters-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .group-letter-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: #061410;
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #94a3b8;
+            font-size: 18px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .group-letter-badge.active {
+            background: #f42a41;
+            border-color: #fde047;
+            color: #ffffff;
+            transform: scale(1.15);
+        }
+        .anim-player-card {
+            background: #061410;
+            border: 1px dashed #fde047;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            color: #fde047;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        #customExitModal, #confirmYesNoModal, #loginChoiceModal, #championModal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 25, 18, 0.84);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+        .modal-box {
+            background: linear-gradient(135deg, rgba(0, 66, 48, 0.96), rgba(6, 20, 16, 0.98));
+            border: 2px solid #fde047;
+            border-radius: 14px;
+            padding: 25px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.85);
+        }
+        .yes-no-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .yes-no-row button {
+            flex: 1;
+            margin-top: 0;
+        }
+
+        .celebration-box {
+            background: linear-gradient(135deg, #006a4e, #061410);
+            border: 3px solid #fde047;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 0 40px rgba(244, 42, 65, 0.55);
+            animation: popIn 0.5s ease;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .trophy-bounce {
+            font-size: 80px;
+            animation: bounce 1s infinite alternate;
+            margin-bottom: 10px;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0) scale(1); }
+            to { transform: translateY(-15px) scale(1.1); }
+        }
+        .fireworks-text {
+            color: #fde047;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ধাপ ১: হোম স্ক্রিন -->
+    <div id="home-section" class="container">
+        <h1>⚽ ফুটবল টুর্নামেন্ট হাব</h1>
+        <p class="subtitle">আপনার নিজের ফুটবল টুর্নামেন্ট আয়োজন ও পরিচালনা করুন সম্পূর্ণ ফ্রিতে!</p>
+        <button class="btn" onclick="showRegisterSection()">📢 নতুন টুর্নামেন্ট তৈরি করুন (Partner)</button>
+    </div>
+
+    <!-- ধাপ ২: পার্টনার অ্যাকাউন্ট রেজিস্ট্রেশন -->
+    <div id="register-section" class="container hidden">
+        <h2>🔐 পার্টনার অ্যাকাউন্ট তৈরি করুন</h2>
+        <p class="info-text">টুর্নামেন্ট হোস্ট করার জন্য আপনার জিমেইল দিয়ে ফ্রি অ্যাকাউন্ট খুলুন।</p>
+        
+        <div class="form-group">
+            <label>আপনার জিমেইল (Gmail):</label>
+            <input type="email" id="userEmail" placeholder="যেমন: example@gmail.com">
+        </div>
+
+        <div class="form-group">
+            <label>পাসওয়ার্ড (Password):</label>
+            <input type="password" id="userPassword" placeholder="কমপক্ষে ৬ ডিজিটের পাসওয়ার্ড দিন">
+        </div>
+
+        <button class="btn" onclick="sendVerificationCode()">📧 ভেরিফিকেশন কোড পাঠান</button>
+    </div>
+
+    <!-- ধাপ ৩: ওটিপি ভেরিফিকেশন -->
+    <div id="verify-section" class="container hidden">
+        <h2>🛡️ একাউন্ট ভেরিফিকেশন</h2>
+        <p class="info-text">আপনার জিমেইলে একটি ৪ ডিজিটের কোড পাঠানো হয়েছে।</p>
+        
+        <div style="background: #020c09; padding: 10px; text-align: center; border-radius: 6px; margin-bottom: 15px; color: #fde047; font-weight: bold; border: 1px solid rgba(255,255,255,0.2);">
+            ডেমো ওটিপি কোড: <span id="generatedOtp" style="font-size: 18px; letter-spacing: 2px;"></span>
+        </div>
+
+        <div class="form-group">
+            <label>৪ ডিজিটের ভেরিফিকেশন কোড লিখুন:</label>
+            <input type="text" id="enteredOtp" placeholder="যেমন: 1234" maxlength="4">
+        </div>
+
+        <button class="btn" onclick="verifyOtp()">✅ অ্যাকাউন্ট ভেরিফাই করুন</button>
+    </div>
+
+    <!-- জিমেইল লগইনের পরের ইন্টারফেস: কন্টিনিউ নাকি নতুন টুর্নামেন্ট? -->
+    <div id="loginChoiceModal" class="hidden">
+        <div class="modal-box">
+            <h3 style="color: #fde047; margin-bottom: 10px;">⚡ টুর্নামেন্ট অপশন</h3>
+            <p style="color: #ffffff; font-size: 14px; margin-bottom: 20px;">আপনার এই জিমেইলে একটি সেভ করা টুর্নামেন্ট পাওয়া গেছে। আপনি কি আগের টুর্নামেন্টটি কন্টিনিউ করবেন নাকি একদম নতুন টুর্নামেন্ট তৈরি করবেন?</p>
+            <button class="btn btn-secondary" onclick="chooseLoginOption('continue')">📂 আগেরটায় অংশগ্রহণ করুন (Continue)</button>
+            <button class="btn btn-accent" style="margin-top: 10px;" onclick="chooseLoginOption('new')">✨ নতুন টুর্নামেন্ট আয়োজন করুন (New)</button>
+        </div>
+    </div>
+
+    <!-- ধাপ ৪: টুর্নামেন্ট তৈরির ফর্ম -->
+    <div id="create-section" class="container hidden">
+        <h2>🏆 টুর্নামেন্টের তথ্য দিন</h2>
+        
+        <div class="form-group">
+            <label>অর্গানাইজার / ক্লাবের নাম:</label>
+            <input type="text" id="organizerName" placeholder="যেমন: ABC Club">
+        </div>
+
+        <div class="form-group">
+            <label>টুর্নামেন্টের নাম:</label>
+            <input type="text" id="tournamentName" placeholder="যেমন: ABC Championship 2026">
+        </div>
+
+        <div class="form-group">
+            <label>টুর্নামেন্ট ফরম্যাট:</label>
+            <select id="format" onchange="onCreateFormatChange()">
+                <option value="knockout">নকআউট কাপ (Knockout Bracket)</option>
+                <option value="group_knockout">গ্রুপ স্টেজ + নকআউট (Group + Knockout)</option>
+                <option value="league_knockout">লিগ + নকআউট (League + Knockout)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>টুর্নামেন্ট ক্যাপাসিটি / প্লেয়ার সংখ্যা:</label>
+            <select id="maxPlayers">
+                <option value="2">২ জন প্লেয়ার</option>
+                <option value="4" selected>৪ জন প্লেয়ার</option>
+                <option value="8">৮ জন প্লেয়ার</option>
+                <option value="16">১৬ জন প্লেয়ার</option>
+                <option value="32">৩২ জন প্লেয়ার</option>
+                <option value="unlimited">আনলিমিটেড প্লেয়ার (Unlimited Players)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>টুর্নামেন্টের রুলস ও নিয়মাবলী:</label>
+            <textarea id="rules" rows="4" placeholder="১. প্রতিটি ম্যাচ টাইম ৮ মিনিটের হবে।&#10;২. ম্যাচ শেষে স্কোরবোর্ডের স্পষ্ট স্ক্রিনশট জমা দিতে হবে।"></textarea>
+        </div>
+
+        <button class="btn" onclick="publishTournament()">🚀 টুর্নামেন্ট তৈরি ও ওপেন করুন</button>
+    </div>
+
+    <!-- ধাপ ৫: অর্গানাইজার ড্যাশবোর্ড -->
+    <div id="dashboard-section" class="container hidden">
+        <div class="top-save-bar">
+            <span style="font-size: 13px; color: #fde047; font-weight: bold;">💾 ক্লাউড ডাটা সিঙ্ক (Auto-Save)</span>
+            <button class="save-score-btn" style="background:#15803d; padding: 6px 14px;" onclick="manualSaveData()">💾 সেভ ডাটা</button>
+        </div>
+
+        <h2>🎉 অর্গানাইজার ড্যাশবোর্ড</h2>
+        
+        <div class="card-box">
+            <p><strong>টুর্নামেন্ট:</strong> <span id="disp-tName"></span></p>
+            <p><strong>আয়োজক:</strong> <span id="disp-orgName"></span></p>
+            <p><strong>ফরম্যাট:</strong> <span id="disp-format"></span></p>
+        </div>
+
+        <div class="share-box">
+            <p style="font-size: 13px; font-weight: bold; color: #fff;">🔗 প্লেয়ারদের রেজিস্ট্রেশন লিংক:</p>
+            <span class="share-link" id="regLink" onclick="openPlayerRegistration()"></span>
+            <button class="btn btn-secondary" style="margin-top: 6px; padding: 8px;" onclick="copyLink()">📋 লিংক কপি করুন</button>
+        </div>
+
+        <div style="margin-top: 18px;">
+            <h3>📋 রেজিস্টার্ড প্লেয়ার তালিকা (<span id="playerCount">০</span> জন)</h3>
+            <div style="max-height: 160px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>নং</th>
+                            <th>প্লেয়ার নাম</th>
+                            <th>গেম আইডি</th>
+                            <th>হোয়াটসঅ্যাপ</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playerTableBody">
+                        <tr><td colspan="5" style="color: #fef08a;">এখনো কোনো প্লেয়ার রেজিস্ট্রেশন করেনি।</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- নকআউট কাপ সরাসরি সিলেক্ট অপশন -->
+            <div id="knockoutDirectBox" class="hidden" style="margin-top: 15px; background: rgba(2, 12, 9, 0.9); padding: 14px; border-radius: 8px; border: 1px solid #fde047;">
+                <div class="form-group" style="margin-bottom: 6px;">
+                    <label style="color: #fde047; margin-bottom: 5px;">🏆 কয়জন নিয়ে নকআউট পর্ব হবে?</label>
+                    <select id="knockoutBracketSize" onchange="onKnockoutSizeSelectChange()">
+                        <option value="2">২ জন নিয়ে নকআউট (2 Players)</option>
+                        <option value="4" selected>৪ জন নিয়ে নকআউট (4 Players)</option>
+                        <option value="8">৮ জন নিয়ে নকআউট (8 Players)</option>
+                        <option value="16">১৬ জন নিয়ে নকআউট (16 Players)</option>
+                        <option value="32">৩২ জন নিয়ে নকআউট (32 Players)</option>
+                    </select>
+                </div>
+                <div id="knockoutDirectInfo" style="font-size: 12px; color: #fef08a; text-align: center; font-weight: bold;">
+                    ⚡ ১টি প্লেয়ার গ্রুপ/লিস্ট তৈরি হবে এবং এখান থেকে ৪ জন নিয়ে নকআউট পর্ব শুরু হবে।
+                </div>
+            </div>
+            
+            <!-- গ্রুপ স্টেজ + নকআউট অপশন বক্স (A, A-B, A-B-C-D, A-B-C-D-E-F-G-H + প্রতি গ্রুপে কয়জন করে উঠবে) -->
+            <div id="groupCountBox" class="hidden" style="margin-top: 15px; background: rgba(2, 12, 9, 0.9); padding: 14px; border-radius: 8px; border: 1px solid #fde047;">
+                <div class="form-group">
+                    <label style="color: #fde047; margin-bottom: 5px;">কয়টি গ্রুপ করতে চান? (Group Format)</label>
+                    <select id="totalGroups" onchange="updateKnockoutPreview()">
+                        <option value="1">Group A (১টি গ্রুপ)</option>
+                        <option value="2">Group A - B (২টি গ্রুপ)</option>
+                        <option value="3">Group A - C (৩টি গ্রুপ)</option>
+                        <option value="4" selected>Group A - D (৪টি গ্রুপ)</option>
+                        <option value="5">Group A - E (৫টি গ্রুপ)</option>
+                        <option value="6">Group A - F (৬টি গ্রুপ)</option>
+                        <option value="8">Group A - H (৮টি গ্রুপ)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label style="color: #fef08a; margin-bottom: 5px;">প্রতি গ্রুপ থেকে কয়জন করে উঠবে?</label>
+                    <select id="qualifyPerGroup" onchange="updateKnockoutPreview()">
+                        <option value="2" selected>২ জন করে (2 Players per Group)</option>
+                        <option value="3">৩ জন করে (3 Players per Group)</option>
+                        <option value="4">৪ জন করে (4 Players per Group)</option>
+                        <option value="5">৫ জন করে (5 Players per Group)</option>
+                    </select>
+                </div>
+
+                <div id="knockoutCalcInfo" style="font-size: 12px; color: #fde047; background: rgba(244, 42, 65, 0.25); padding: 8px; border-radius: 6px; text-align: center; font-weight: bold;">
+                    ⚡ অ্যালগরিদম: ৪টি গ্রুপ (A - D) × ২ জন করে উঠলে = মোট ৮ জন প্লেয়ার নিয়ে নকআউট হবে।
+                </div>
+            </div>
+
+            <!-- লিগ + নকআউট অপশন বক্স -->
+            <div id="leagueKnockoutBox" class="hidden" style="margin-top: 15px; background: rgba(2, 12, 9, 0.9); padding: 14px; border-radius: 8px; border: 1px solid #38bdf8;">
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label style="color: #38bdf8; margin-bottom: 5px;">🏆 নকআউটের জন্য লিগ টেবিল থেকে কয়জন প্লেয়ার উঠবে?</label>
+                    <select id="leagueQualifyCount" onchange="updateLeagueKnockoutPreview()">
+                        <option value="2">২ জন (সরাসরি ফাইনাল বক্স)</option>
+                        <option value="4" selected>৪ জন (সেমিফাইনাল বক্স)</option>
+                        <option value="8">৮ জন (কোয়ার্টার ফাইনাল বক্স)</option>
+                        <option value="16">১৬ জন (রাউন্ড অফ ১৬ বক্স)</option>
+                        <option value="32">৩২ জন (রাউন্ড অফ ৩২ বক্স)</option>
+                    </select>
+                </div>
+                <div id="leagueKnockoutCalcInfo" style="font-size: 12px; color: #fde047; background: rgba(2, 132, 199, 0.25); padding: 8px; border-radius: 6px; text-align: center; font-weight: bold;">
+                    ⚡ হিসাব: লিগ টেবিলের শীর্ষ ৪ জন প্লেয়ার নিয়ে নকআউট বক্স তৈরি হবে।
+                </div>
+            </div>
+
+            <button class="btn btn-accent" id="drawBtn" onclick="startDrawWithAnimation()">🎲 ড্র দিন (লাইভ অ্যানিমেশন সহ)</button>
+        </div>
+
+        <div id="fixture-section" class="hidden" style="margin-top: 22px;">
+            <h3 id="fixtureHeader" style="border-bottom: 2px solid #fde047; padding-bottom: 8px; margin-bottom: 15px;">⚡ টুর্নামেন্ট ব্র্যাকেট ও টেবিল</h3>
+            <div id="fixtureList"></div>
+        </div>
+
+        <!-- এক্সিট বাটন -->
+        <button class="btn btn-exit" onclick="openExitModal()">🚪 এক্সিট (Exit / Reset Tournament)</button>
+    </div>
+
+    <!-- কাস্টম এক্সিট মোডাল পপআপ -->
+    <div id="customExitModal" class="hidden">
+        <div class="modal-box">
+            <h3 style="color: #fde047; margin-bottom: 10px;">🚪 এক্সিট অপশন</h3>
+            <p style="color: #ffffff; font-size: 14px; margin-bottom: 20px;">আপনি কি ডাটা সেভ রেখে অপশন পেজে ফিরে যেতে চান, নাকি বের হতে চান?</p>
+            <button class="btn" style="background: #15803d; margin-bottom: 10px;" onclick="exitAction('save')">💾 সেভ করে অপশন পেজে যান</button>
+            <button class="btn btn-danger" onclick="promptFullExitYesNo()">❌ সম্পূর্ণ বের হয়ে যান (Exit)</button>
+            <button class="btn btn-secondary" style="margin-top: 10px;" onclick="closeExitModal()">বাতিল করুন</button>
+        </div>
+    </div>
+
+    <!-- ইয়েস / নো (Yes / No) এক্সিট কনফার্মেশন মোডাল -->
+    <div id="confirmYesNoModal" class="hidden">
+        <div class="modal-box">
+            <h3 style="color: #fde047; margin-bottom: 10px;">⚠️ বের হতে চান?</h3>
+            <p style="color: #ffffff; font-size: 14px; margin-bottom: 10px;">আপনি কি নিশ্চিতভাবে এখান থেকে বের হতে চান? (হ্যাঁ দিলে সমস্ত সেভ ডাটা মুছে যাবে)</p>
+            <div class="yes-no-row">
+                <button class="btn btn-danger" onclick="confirmFullExitYes()">✅ হ্যাঁ (Yes)</button>
+                <button class="btn btn-secondary" onclick="cancelFullExitNo()">❌ না (No)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ধাপ ৬: প্লেয়ার রেজিস্ট্রেশন পেজ -->
+    <div id="player-reg-section" class="container hidden">
+        <h2 id="playerRegTitle">🏆 টুর্নামেন্ট রেজিস্ট্রেশন</h2>
+        <p class="info-text">আপনার সঠিক তথ্য দিয়ে নিচের ফরমটি পূরণ করুন।</p>
+        
+        <div class="form-group">
+            <label>আপনার নাম / টিম নাম:</label>
+            <input type="text" id="pName" placeholder="যেমন: Jubaid">
+        </div>
+
+        <div class="form-group">
+            <label>ইন-গেম ইউজারনেম / আইডি:</label>
+            <input type="text" id="pGameId" placeholder="যেমন: eFootball ID">
+        </div>
+
+        <div class="form-group">
+            <label>হোয়াটসঅ্যাপ নম্বর:</label>
+            <input type="text" id="pWhatsApp" placeholder="যেমন: 017xxxxxxxx">
+        </div>
+
+        <button class="btn" onclick="submitPlayerRegistration()">✅ টুর্নামেন্টে রেজিস্টার করুন</button>
+        <button class="btn btn-secondary" onclick="backToDashboard()">🔙 অর্গানাইজার ড্যাশবোর্ডে ফিরে যান</button>
+    </div>
+
+    <!-- চ্যাম্পিয়ন আতশবাজি ও ভিডিও ডাউনলোড মোডাল -->
+    <div id="championModal" class="hidden">
+        <div class="celebration-box">
+            <div class="trophy-bounce">🏆</div>
+            <div class="fireworks-text" id="championTitle">অভিনন্দন চ্যাম্পিয়ন!</div>
+            <p style="color: #ffffff; font-size: 14px; margin-bottom: 15px;" id="championDesc">টুর্নামেন্ট জয় করার জন্য অভিনন্দন!</p>
+            
+            <div style="background: rgba(2,12,9,0.85); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #fde047;">
+                <p style="color: #fde047; font-size: 13px; font-weight: bold;">🎆 ফায়ারওয়ার্কস ও সেলিব্রেশন ভিডিও প্রস্তুত!</p>
+            </div>
+
+            <button class="btn" style="background: #fde047; color: #000; margin-bottom: 10px; text-shadow: none;" onclick="downloadCelebrationVideo()">📥 সেলিব্রেশন ভিডিও ডাউনলোড করুন</button>
+            <button class="btn btn-secondary" onclick="closeChampionModal()">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <script>
+        let correctOtp = "";
+        let loggedInEmail = "";
+        let tournamentData = { name: "", organizer: "", format: "", formatValue: "", maxPlayers: 4 };
+        let registeredPlayers = [];
+        let knockoutGroupPlayers = [];
+        let groupPlayersMap = {}; 
+        let groupMatchesList = {}; 
+        let knockoutRounds = [];
+
+        const GROUP_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+        window.onload = function() {
+            document.getElementById('home-section').classList.remove('hidden');
+        };
+
+        function clearAllTournamentState() {
+            localStorage.removeItem('football_tournament_app_data');
+            tournamentData = { name: "", organizer: "", format: "", formatValue: "", maxPlayers: 4 };
+            registeredPlayers = [];
+            knockoutGroupPlayers = [];
+            groupPlayersMap = {};
+            groupMatchesList = {};
+            knockoutRounds = [];
+
+            document.getElementById('organizerName').value = "";
+            document.getElementById('tournamentName').value = "";
+            document.getElementById('rules').value = "";
+            document.getElementById('pName').value = "";
+            document.getElementById('pGameId').value = "";
+            document.getElementById('pWhatsApp').value = "";
+            document.getElementById('fixtureList').innerHTML = "";
+            document.getElementById('fixture-section').classList.add('hidden');
+            updatePlayerTable();
+        }
+
+        function manualSaveData() {
+            let totalGroups = document.getElementById('totalGroups') ? document.getElementById('totalGroups').value : "4";
+            let qualifyPerGroup = document.getElementById('qualifyPerGroup') ? document.getElementById('qualifyPerGroup').value : "2";
+            let leagueQualifyCount = document.getElementById('leagueQualifyCount') ? document.getElementById('leagueQualifyCount').value : "4";
+            let knockoutBracketSize = document.getElementById('knockoutBracketSize') ? document.getElementById('knockoutBracketSize').value : "4";
+            let appState = {
+                loggedInEmail, tournamentData, registeredPlayers, knockoutGroupPlayers,
+                groupPlayersMap, groupMatchesList, knockoutRounds,
+                totalGroups, qualifyPerGroup, leagueQualifyCount, knockoutBracketSize
+            };
+            localStorage.setItem('football_tournament_app_data', JSON.stringify(appState));
+        }
+
+        function openExitModal() {
+            document.getElementById('customExitModal').classList.remove('hidden');
+        }
+        function closeExitModal() {
+            document.getElementById('customExitModal').classList.add('hidden');
+        }
+        function promptFullExitYesNo() {
+            closeExitModal();
+            document.getElementById('confirmYesNoModal').classList.remove('hidden');
+        }
+        function cancelFullExitNo() {
+            document.getElementById('confirmYesNoModal').classList.add('hidden');
+        }
+        function confirmFullExitYes() {
+            document.getElementById('confirmYesNoModal').classList.add('hidden');
+            clearAllTournamentState();
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('player-reg-section').classList.add('hidden');
+            document.getElementById('create-section').classList.add('hidden');
+            document.getElementById('home-section').classList.remove('hidden');
+        }
+
+        function exitAction(actionType) {
+            closeExitModal();
+            if (actionType === 'save') {
+                manualSaveData();
+                document.getElementById('dashboard-section').classList.add('hidden');
+                document.getElementById('loginChoiceModal').classList.remove('hidden');
+            }
+        }
+
+        function showRegisterSection() {
+            document.getElementById('home-section').classList.add('hidden');
+            document.getElementById('register-section').classList.remove('hidden');
+        }
+
+        function sendVerificationCode() {
+            const email = document.getElementById('userEmail').value.trim();
+            const password = document.getElementById('userPassword').value.trim();
+            if (!email || !email.includes('@')) { alert("দয়া করে সঠিক জিমেইল দিন!"); return; }
+            if (!password || password.length < 6) { alert("পাসওয়ার্ড কমপক্ষে ৬ ডিজিটের হতে হবে!"); return; }
+            
+            loggedInEmail = email;
+            correctOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById('generatedOtp').innerText = correctOtp;
+            document.getElementById('register-section').classList.add('hidden');
+            document.getElementById('verify-section').classList.remove('hidden');
+        }
+
+        function verifyOtp() {
+            const userOtp = document.getElementById('enteredOtp').value.trim();
+            if (userOtp !== correctOtp) { alert("ভুল ওটিপি কোড!"); return; }
+            
+            document.getElementById('verify-section').classList.add('hidden');
+
+            let savedData = localStorage.getItem('football_tournament_app_data');
+            if (savedData) {
+                try {
+                    let parsed = JSON.parse(savedData);
+                    if (parsed.tournamentData && parsed.tournamentData.name) {
+                        document.getElementById('loginChoiceModal').classList.remove('hidden');
+                        return;
+                    }
+                } catch(e) {}
+            }
+
+            clearAllTournamentState();
+            document.getElementById('create-section').classList.remove('hidden');
+        }
+
+        function chooseLoginOption(choice) {
+            document.getElementById('loginChoiceModal').classList.add('hidden');
+            if (choice === 'continue') {
+                let savedData = localStorage.getItem('football_tournament_app_data');
+                if (!savedData) {
+                    clearAllTournamentState();
+                    document.getElementById('create-section').classList.remove('hidden');
+                    return;
+                }
+                let parsed = JSON.parse(savedData);
+                tournamentData = parsed.tournamentData || { name: "", organizer: "", format: "", formatValue: "", maxPlayers: 4 };
+                registeredPlayers = parsed.registeredPlayers || [];
+                knockoutGroupPlayers = parsed.knockoutGroupPlayers || [];
+                groupPlayersMap = parsed.groupPlayersMap || {};
+                groupMatchesList = parsed.groupMatchesList || {};
+                knockoutRounds = parsed.knockoutRounds || [];
+                if (parsed.totalGroups) document.getElementById('totalGroups').value = parsed.totalGroups;
+                if (parsed.qualifyPerGroup) document.getElementById('qualifyPerGroup').value = parsed.qualifyPerGroup;
+                if (parsed.leagueQualifyCount) document.getElementById('leagueQualifyCount').value = parsed.leagueQualifyCount;
+                if (parsed.knockoutBracketSize) document.getElementById('knockoutBracketSize').value = parsed.knockoutBracketSize;
+
+                document.getElementById('disp-tName').innerText = tournamentData.name;
+                document.getElementById('disp-orgName').innerText = tournamentData.organizer;
+                document.getElementById('disp-format').innerText = tournamentData.format;
+                document.getElementById('playerRegTitle').innerText = "🏆 " + tournamentData.name + " - রেজিস্ট্রেশন ফর্ম";
+                document.getElementById('regLink').innerText = "https://football-hub.com/join/" + tournamentData.name.toLowerCase().replace(/\s+/g, '-');
+
+                checkFormat();
+                document.getElementById('dashboard-section').classList.remove('hidden');
+                updatePlayerTable();
+                if (knockoutGroupPlayers.length > 0 || Object.keys(groupMatchesList).length > 0 || knockoutRounds.length > 0) {
+                    document.getElementById('fixture-section').classList.remove('hidden');
+                    executeActualDraw(true);
+                }
+            } else {
+                clearAllTournamentState();
+                document.getElementById('create-section').classList.remove('hidden');
+            }
+        }
+
+        function onCreateFormatChange() {
+            const formatVal = document.getElementById('format').value;
+            const maxPlayersSel = document.getElementById('maxPlayers');
+            if (formatVal === 'league_knockout') {
+                maxPlayersSel.value = 'unlimited';
+            } else if (maxPlayersSel.value === 'unlimited') {
+                maxPlayersSel.value = '4';
+            }
+        }
+
+        function checkFormat() {
+            const formatVal = tournamentData.formatValue || document.getElementById('format').value;
+            const koDirectBox = document.getElementById('knockoutDirectBox');
+            const groupBox = document.getElementById('groupCountBox');
+            const leagueBox = document.getElementById('leagueKnockoutBox');
+
+            if (formatVal === 'knockout') {
+                koDirectBox.classList.remove('hidden');
+                groupBox.classList.add('hidden');
+                leagueBox.classList.add('hidden');
+                updateKnockoutDirectPreview();
+            } else if (formatVal === 'group_knockout') {
+                koDirectBox.classList.add('hidden');
+                groupBox.classList.remove('hidden');
+                leagueBox.classList.add('hidden');
+                updateKnockoutPreview();
+            } else if (formatVal === 'league_knockout') {
+                koDirectBox.classList.add('hidden');
+                groupBox.classList.add('hidden');
+                leagueBox.classList.remove('hidden');
+                updateLeagueKnockoutPreview();
+            } else {
+                koDirectBox.classList.add('hidden');
+                groupBox.classList.add('hidden');
+                leagueBox.classList.add('hidden');
+            }
+        }
+
+        function updateKnockoutDirectPreview() {
+            let koSize = parseInt(document.getElementById('knockoutBracketSize').value) || 4;
+            document.getElementById('knockoutDirectInfo').innerText = `⚡ ১টি প্লেয়ার গ্রুপ/লিস্ট তৈরি হবে এবং এখান থেকে ${koSize} জন নিয়ে নকআউট পর্ব শুরু হবে।`;
+        }
+
+        function onKnockoutSizeSelectChange() {
+            updateKnockoutDirectPreview();
+            if (tournamentData.formatValue === 'knockout' && knockoutGroupPlayers.length > 0) {
+                let koSize = parseInt(document.getElementById('knockoutBracketSize').value) || 4;
+                let selectedKoPlayers = knockoutGroupPlayers.slice(0, koSize);
+                knockoutRounds = buildKnockoutRoundsFromPlayers(selectedKoPlayers);
+                renderKnockoutCupView(selectedKoPlayers, koSize);
+                manualSaveData();
+            }
+        }
+
+        function getGroupRangeLabel(numGroups) {
+            if (numGroups === 1) return "Group A";
+            return `Group A - ${GROUP_LETTERS[numGroups - 1]}`;
+        }
+
+        function updateKnockoutPreview() {
+            let numG = parseInt(document.getElementById('totalGroups').value);
+            let qualP = parseInt(document.getElementById('qualifyPerGroup').value);
+            let totalQual = numG * qualP;
+            let rangeText = getGroupRangeLabel(numG);
+            document.getElementById('knockoutCalcInfo').innerText = `⚡ অ্যালগরিদম: ${numG}টি গ্রুপ (${rangeText}) × ${qualP} জন করে উঠলে = মোট ${totalQual} জন প্লেয়ার নিয়ে নকআউট হবে।`;
+            Object.keys(groupPlayersMap).forEach(k => {
+                if (k.startsWith('Group_')) updateTableUI(k);
+            });
+        }
+
+        function updateLeagueKnockoutPreview() {
+            let qualCount = parseInt(document.getElementById('leagueQualifyCount').value) || 4;
+            document.getElementById('leagueKnockoutCalcInfo').innerText = `⚡ হিসাব: লিগ টেবিলের শীর্ষ ${qualCount} জন প্লেয়ার নিয়ে নকআউট বক্স তৈরি হবে।`;
+            if (groupPlayersMap['League_Main']) {
+                updateTableUI('League_Main');
+            }
+        }
+
+        function publishTournament() {
+            const orgName = document.getElementById('organizerName').value.trim();
+            const tName = document.getElementById('tournamentName').value.trim();
+            const formatVal = document.getElementById('format').value;
+            const formatText = document.getElementById('format').selectedOptions[0].text;
+            const maxPVal = document.getElementById('maxPlayers').value;
+            const maxP = maxPVal === 'unlimited' ? 'Unlimited' : parseInt(maxPVal);
+
+            if (!orgName || !tName) { alert("অর্গানাইজার ও টুর্নামেন্টের নাম দিন!"); return; }
+
+            registeredPlayers = [];
+            knockoutGroupPlayers = [];
+            groupPlayersMap = {};
+            groupMatchesList = {};
+            knockoutRounds = [];
+            document.getElementById('fixtureList').innerHTML = "";
+            document.getElementById('fixture-section').classList.add('hidden');
+            updatePlayerTable();
+
+            tournamentData = { name: tName, organizer: orgName, format: formatText, formatValue: formatVal, maxPlayers: maxP };
+
+            document.getElementById('disp-tName').innerText = tName;
+            document.getElementById('disp-orgName').innerText = orgName;
+            document.getElementById('disp-format').innerText = formatText;
+            document.getElementById('playerRegTitle').innerText = "🏆 " + tName + " - রেজিস্ট্রেশন ফর্ম";
+            document.getElementById('regLink').innerText = "https://football-hub.com/join/" + tName.toLowerCase().replace(/\s+/g, '-');
+
+            checkFormat();
+            manualSaveData();
+            document.getElementById('create-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(document.getElementById('regLink').innerText).then(() => alert("লিংক কপি হয়েছে!"));
+        }
+
+        function openPlayerRegistration() {
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('player-reg-section').classList.remove('hidden');
+        }
+
+        function backToDashboard() {
+            document.getElementById('player-reg-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        }
+
+        function submitPlayerRegistration() {
+            const pName = document.getElementById('pName').value.trim();
+            const pGameId = document.getElementById('pGameId').value.trim();
+            const pWhatsApp = document.getElementById('pWhatsApp').value.trim();
+
+            if (!pName || !pGameId || !pWhatsApp) { alert("সবগুলো তথ্য পূরণ করুন!"); return; }
+
+            if (tournamentData.maxPlayers !== 'Unlimited' && registeredPlayers.length >= tournamentData.maxPlayers) {
+                alert(`এই টুর্নামেন্টের সর্বোচ্চ প্লেয়ার সীমা (${tournamentData.maxPlayers} জন) পূর্ণ হয়ে গেছে!`);
+                return;
+            }
+
+            registeredPlayers.push({ name: pName, gameId: pGameId, whatsApp: pWhatsApp });
+            alert("রেজিস্ট্রেশন সফল হয়েছে!");
+            document.getElementById('pName').value = "";
+            document.getElementById('pGameId').value = "";
+            document.getElementById('pWhatsApp').value = "";
+            updatePlayerTable();
+            manualSaveData();
+            backToDashboard();
+        }
+
+        function deletePlayer(index) {
+            if (confirm("আপনি কি এই প্লেয়ারকে তালিকা থেকে বাদ দিতে চান?")) {
+                registeredPlayers.splice(index, 1);
+                updatePlayerTable();
+                manualSaveData();
+            }
+        }
+
+        function updatePlayerTable() {
+            const tbody = document.getElementById('playerTableBody');
+            document.getElementById('playerCount').innerText = registeredPlayers.length;
+            if (registeredPlayers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color: #fef08a;">এখনো কোনো প্লেয়ার রেজিস্ট্রেশন করেনি।</td></tr>`;
+                return;
+            }
+            let html = "";
+            registeredPlayers.forEach((p, index) => {
+                html += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${p.name}</td>
+                    <td>${p.gameId}</td>
+                    <td>${p.whatsApp}</td>
+                    <td><button class="btn-danger" style="padding:4px 8px; font-size:11px;" onclick="deletePlayer(${index})">❌ ডিলিট</button></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function startDrawWithAnimation() {
+            if (registeredPlayers.length < 2) { 
+                alert("ড্র করার জন্য কমপক্ষে ২ জন প্লেয়ার প্রয়োজন!"); 
+                return; 
+            }
+
+            knockoutGroupPlayers = [];
+            groupPlayersMap = {};
+            groupMatchesList = {};
+            knockoutRounds = [];
+
+            const drawBtn = document.getElementById('drawBtn');
+            drawBtn.disabled = true;
+            drawBtn.style.opacity = "0.6";
+
+            const format = tournamentData.formatValue;
+            const numGroups = (format === 'group_knockout') ? parseInt(document.getElementById('totalGroups').value) : 4;
+            const badges = format === 'league_knockout' 
+                ? ['L', 'E', 'A', 'G', 'U', 'E'] 
+                : (format === 'knockout' ? ['K', 'N', 'O', 'C', 'K'] : GROUP_LETTERS.slice(0, numGroups));
+
+            document.getElementById('fixtureHeader').innerText = `🎲 লাইভ ফিক্সচার ড্র চলছে...`;
+            const fixtureSec = document.getElementById('fixture-section');
+            const fixtureList = document.getElementById('fixtureList');
+            fixtureSec.classList.remove('hidden');
+
+            let badgesHtml = badges.map((l, i) => `<div class="group-letter-badge" id="badge-${i}">${l}</div>`).join('');
+
+            fixtureList.innerHTML = `
+                <div id="drawAnimationOverlay">
+                    <h3 style="color: #fde047; margin-bottom: 5px;">⚡ প্লেয়ারদের ম্যাচ ফিক্সচার তৈরি হচ্ছে...</h3>
+                    <p style="color: #ffffff; font-size: 13px;">ড্র সিকোয়েন্স চলছে, অপেক্ষা করুন</p>
+                    <div class="group-letters-row">${badgesHtml}</div>
+                    <div class="anim-player-card" id="animStatusText">ড্র শুরু হচ্ছে...</div>
+                </div>
+            `;
+
+            let step = 0;
+            let totalDuration = 4500; 
+            let intervalTime = 250;   
+
+            let animInterval = setInterval(() => {
+                badges.forEach((l, i) => {
+                    let el = document.getElementById(`badge-${i}`);
+                    if (el) el.classList.remove('active');
+                });
+
+                let idx = step % badges.length;
+                let activeBadge = document.getElementById(`badge-${idx}`);
+                if (activeBadge) activeBadge.classList.add('active');
+
+                let randomPlayer = registeredPlayers[step % registeredPlayers.length];
+                let statusEl = document.getElementById('animStatusText');
+                if (statusEl) {
+                    statusEl.innerText = format === 'league_knockout' 
+                        ? `League Fixture ➔ ${randomPlayer.name}` 
+                        : (format === 'knockout' ? `Knockout Pool ➔ ${randomPlayer.name}` : `Group ${badges[idx]} ➔ ${randomPlayer.name}`);
+                }
+
+                step++;
+            }, intervalTime);
+
+            setTimeout(() => {
+                clearInterval(animInterval);
+                drawBtn.disabled = false;
+                drawBtn.style.opacity = "1";
+                executeActualDraw(false);
+                manualSaveData();
+            }, totalDuration);
+        }
+
+        function buildKnockoutRoundsFromPlayers(playersArr) {
+            let matches = [];
+            for (let i = 0; i < playersArr.length; i += 2) {
+                if (i + 1 < playersArr.length) {
+                    matches.push({
+                        p1: playersArr[i],
+                        p2: playersArr[i+1],
+                        s1: null, s2: null, pen1: null, pen2: null, winner: null
+                    });
+                } else {
+                    matches.push({
+                        p1: playersArr[i],
+                        p2: "BYE (অটো কোয়ালিফাই)",
+                        s1: 1, s2: 0, pen1: null, pen2: null, winner: playersArr[i]
+                    });
+                }
+            }
+            let roundName = getRoundTitleByPlayerCount(playersArr.length);
+            return [{ roundName: roundName, matches: matches }];
+        }
+
+        function renderKnockoutCupView(selectedKoPlayers, koSize) {
+            let playersGridHtml = knockoutGroupPlayers.map((name, idx) => {
+                let isSelected = idx < koSize;
+                return `<div class="ko-player-item ${isSelected ? 'active-ko' : ''}">${idx + 1}. ${name}${isSelected ? ' ★' : ''}</div>`;
+            }).join('');
+
+            let html = `
+                <div class="single-ko-group-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <span style="color:#fde047; font-weight:bold; font-size:14px;">👥 নকআউট প্লেয়ার গ্রুপ (মোট ${knockoutGroupPlayers.length} জন)</span>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <label style="margin:0; font-size:12px; color:#38bdf8;">কয়জন নিয়ে নকআউট পর্ব:</label>
+                            <select id="liveKoSizeSelect" onchange="syncLiveKnockoutSize(this.value)" style="width:auto; padding:5px 8px; font-size:12px;">
+                                <option value="2" ${koSize === 2 ? 'selected' : ''}>২ জন নিয়ে নকআউট</option>
+                                <option value="4" ${koSize === 4 ? 'selected' : ''}>৪ জন নিয়ে নকআউট</option>
+                                <option value="8" ${koSize === 8 ? 'selected' : ''}>৮ জন নিয়ে নকআউট</option>
+                                <option value="16" ${koSize === 16 ? 'selected' : ''}>১৬ জন নিয়ে নকআউট</option>
+                                <option value="32" ${koSize === 32 ? 'selected' : ''}>৩২ জন নিয়ে নকআউট</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p style="font-size:11px; color:#cbd5e1; margin-top:6px;">
+                        শুধুমাত্র প্লেয়ার তালিকা—কোনো গ্রুপ ম্যাচ বা পয়েন্ট নেই। এখান থেকে <strong>${selectedKoPlayers.length} জন</strong> নিয়ে নিচের নকআউট পর্ব সাজানো হয়েছে।
+                    </p>
+                    <div class="ko-player-grid">${playersGridHtml}</div>
+                </div>
+                <div id="knockoutStageContainer"></div>
+            `;
+            document.getElementById('fixtureList').innerHTML = html;
+            renderAllKnockoutRounds();
+        }
+
+        function syncLiveKnockoutSize(newSizeStr) {
+            let koSize = parseInt(newSizeStr) || 4;
+            document.getElementById('knockoutBracketSize').value = koSize.toString();
+            updateKnockoutDirectPreview();
+            let selectedKoPlayers = knockoutGroupPlayers.slice(0, koSize);
+            knockoutRounds = buildKnockoutRoundsFromPlayers(selectedKoPlayers);
+            renderKnockoutCupView(selectedKoPlayers, koSize);
+            manualSaveData();
+        }
+
+        function executeActualDraw(isContinueRestore = false) {
+            let shuffled = [...registeredPlayers].sort(() => 0.5 - Math.random());
+            let finalHtml = "";
+            let format = tournamentData.formatValue;
+            let qualifyPerGroup = parseInt(document.getElementById('qualifyPerGroup').value) || 2;
+            let leagueQualifyCount = parseInt(document.getElementById('leagueQualifyCount').value) || 4;
+
+            if (format === 'knockout') {
+                if (!isContinueRestore || knockoutGroupPlayers.length === 0) {
+                    knockoutGroupPlayers = shuffled.map(p => p.name);
+                }
+                let koSize = parseInt(document.getElementById('knockoutBracketSize').value) || 4;
+                let selectedKoPlayers = knockoutGroupPlayers.slice(0, koSize);
+                if (knockoutRounds.length === 0) {
+                    knockoutRounds = buildKnockoutRoundsFromPlayers(selectedKoPlayers);
+                }
+                document.getElementById('fixtureHeader').innerText = `🏆 নকআউট পর্ব (${selectedKoPlayers.length} জন নিয়ে)`;
+                renderKnockoutCupView(selectedKoPlayers, koSize);
+                return;
+            }
+
+            if (Object.keys(groupPlayersMap).length === 0) {
+                groupPlayersMap = {};
+                groupMatchesList = {};
+
+                if (format === 'group_knockout') {
+                    let numGroups = parseInt(document.getElementById('totalGroups').value);
+                    let groupKeys = GROUP_LETTERS.slice(0, numGroups).map(l => `Group_${l}`);
+                    
+                    groupKeys.forEach(k => { groupPlayersMap[k] = []; groupMatchesList[k] = []; });
+                    shuffled.forEach((player, idx) => {
+                        let gKey = groupKeys[idx % groupKeys.length];
+                        groupPlayersMap[gKey].push(player.name);
+                    });
+                }
+            }
+
+            if (format === 'group_knockout') {
+                let groupKeys = Object.keys(groupPlayersMap);
+                let totalKoCount = groupKeys.length * qualifyPerGroup;
+                document.getElementById('fixtureHeader').innerText = `📊 গ্রুপ স্টেজ টেবিল (${groupKeys.length} গ্রুপ ➔ ${totalKoCount} জন নকআউটে)`;
+
+                groupKeys.forEach((gKey) => {
+                    let letter = gKey.replace('Group_', '');
+                    let label = `Group ${letter}`;
+                    let pList = groupPlayersMap[gKey];
+
+                    finalHtml += `<div class="stage-1971-bg" style="padding: 10px; border-radius: 10px; border: 1px solid rgba(253,224,71,0.45); margin-bottom: 18px;">
+                        <div class="group-header">📌 ${label} - পয়েন্ট টেবিল <span style="font-size:11px; float:right; color:#fde047;">(প্রতি গ্রুপ থেকে ${qualifyPerGroup} জন উঠবে)</span></div>
+                        <table id="table-${gKey}">
+                            <thead>
+                                <tr><th>#</th><th>প্লেয়ার নাম</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>PTS</th></tr>
+                            </thead>
+                            <tbody>`;
+                    
+                    if (pList.length === 0) {
+                        finalHtml += `<tr><td colspan="8" style="color:#94a3b8;">খালি গ্রুপ (কোনো প্লেয়ার নেই)</td></tr>`;
+                    } else {
+                        pList.forEach((pName, idx) => {
+                            let isQ = idx < qualifyPerGroup ? 'qualified-row' : '';
+                            let qMark = idx < qualifyPerGroup ? ' ⭐' : '';
+                            finalHtml += `<tr class="${isQ}">
+                                <td>${idx + 1}</td>
+                                <td style="text-align:left; font-weight:bold;">${pName}${qMark}</td>
+                                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                                <td style="color:#fde047; font-weight:bold;">0</td>
+                            </tr>`;
+                        });
+                    }
+                    finalHtml += `</tbody></table>
+                    </div>`;
+
+                    if (pList.length >= 2) {
+                        finalHtml += `<div style="background:rgba(2,12,9,0.84); padding:12px; border-radius:8px; margin-bottom:18px; border:1px solid rgba(255,255,255,0.22);">
+                            <div style="color:#fde047; font-weight:bold; margin-bottom:10px; font-size:13px;">⚔️ ${label} ম্যাচ ফিক্সচার ও স্কোর এন্ট্রি</div>`;
+                        
+                        if (groupMatchesList[gKey].length === 0) {
+                            for (let i = 0; i < pList.length; i++) {
+                                for (let j = i + 1; j < pList.length; j++) {
+                                    groupMatchesList[gKey].push({ p1: pList[i], p2: pList[j], s1: null, s2: null, played: false });
+                                }
+                            }
+                        }
+
+                        groupMatchesList[gKey].forEach((m, matchIdx) => {
+                            let val1 = m.s1 !== null ? m.s1 : '';
+                            let val2 = m.s2 !== null ? m.s2 : '';
+                            let btnText = m.played ? "✅ সেভড" : "💾 সেভ";
+                            let btnClass = m.played ? "save-score-btn saved" : "save-score-btn";
+
+                            finalHtml += `<div class="match-card">
+                                <span class="match-team left">${m.p1}</span>
+                                <div class="score-controls">
+                                    <input type="number" min="0" class="score-input" id="s1_${gKey}_${matchIdx}" value="${val1}" placeholder="0">
+                                    <span style="color:#fde047; font-weight:bold;">-</span>
+                                    <input type="number" min="0" class="score-input" id="s2_${gKey}_${matchIdx}" value="${val2}" placeholder="0">
+                                    <button class="${btnClass}" id="btn_${gKey}_${matchIdx}" onclick="saveMatchScore('${gKey}', ${matchIdx})">${btnText}</button>
+                                    <button class="btn-warning" onclick="resetMatchScore('${gKey}', ${matchIdx})">🔄 রিসেট</button>
+                                </div>
+                                <span class="match-team right">${m.p2}</span>
+                            </div>`;
+                        });
+                        finalHtml += `</div>`;
+                    }
+                });
+
+                finalHtml += `<div style="text-align:center; margin-top:20px;">
+                    <button class="btn" style="background:#0284c7;" onclick="proceedToKnockoutStage()">➡️ গ্রুপ স্টেজ শেষ! ${totalKoCount} জনের নকআউট পর্বে যান (Next)</button>
+                </div>`;
+
+                finalHtml += `<div id="knockoutStageContainer" class="hidden"></div>`;
+            } 
+            else if (format === 'league_knockout') {
+                document.getElementById('fixtureHeader').innerText = `📋 লিগ চ্যাম্পিয়নশিপ পয়েন্ট টেবিল ও নকআউট পর্ব`;
+                let gKey = 'League_Main';
+                if (!groupPlayersMap[gKey]) {
+                    groupPlayersMap[gKey] = shuffled.map(p => p.name);
+                    groupMatchesList[gKey] = [];
+                }
+
+                finalHtml += `<div class="stage-1971-bg" style="padding: 10px; border-radius: 10px; border: 1px solid rgba(253,224,71,0.45); margin-bottom: 18px;">
+                    <div class="group-header" style="background:#0284c7;">🏆 অফিশিয়াল লিগ স্ট্যান্ডিংস <span style="font-size:11px; float:right; color:#fde047;">(শীর্ষ ${leagueQualifyCount} জন নকআউটে উঠবে)</span></div>
+                    <table id="table-${gKey}">
+                        <thead>
+                            <tr><th>পজিশন</th><th>প্লেয়ার</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>PTS</th></tr>
+                        </thead>
+                        <tbody>`;
+                groupPlayersMap[gKey].forEach((pName, idx) => {
+                    let isQ = idx < leagueQualifyCount ? 'qualified-row' : '';
+                    let qMark = idx < leagueQualifyCount ? ' ⭐' : '';
+                    finalHtml += `<tr class="${isQ}">
+                        <td><strong>${idx + 1}</strong></td>
+                        <td style="text-align:left; font-weight:bold; color:#fef08a;">${pName}${qMark}</td>
+                        <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                        <td style="color:#fde047; font-weight:bold; font-size:13px;">0</td>
+                    </tr>`;
+                });
+                finalHtml += `</tbody></table>
+                </div>`;
+
+                let pList = groupPlayersMap[gKey];
+                finalHtml += `<div style="background:rgba(2,12,9,0.84); padding:12px; border-radius:8px; margin-bottom:18px; border:1px solid rgba(255,255,255,0.22);">
+                    <div style="color:#fde047; font-weight:bold; margin-bottom:10px; font-size:13px;">⚔️ লিগ ম্যাচ ফিক্সচার ও স্কোর এন্ট্রি</div>`;
+                
+                if (groupMatchesList[gKey].length === 0) {
+                    for (let i = 0; i < pList.length; i++) {
+                        for (let j = i + 1; j < pList.length; j++) {
+                            groupMatchesList[gKey].push({ p1: pList[i], p2: pList[j], s1: null, s2: null, played: false });
+                        }
+                    }
+                }
+
+                groupMatchesList[gKey].forEach((m, matchIdx) => {
+                    let val1 = m.s1 !== null ? m.s1 : '';
+                    let val2 = m.s2 !== null ? m.s2 : '';
+                    let btnText = m.played ? "✅ সেভড" : "💾 সেভ";
+                    let btnClass = m.played ? "save-score-btn saved" : "save-score-btn";
+
+                    finalHtml += `<div class="match-card">
+                        <span class="match-team left">${m.p1}</span>
+                        <div class="score-controls">
+                            <input type="number" min="0" class="score-input" id="s1_${gKey}_${matchIdx}" value="${val1}" placeholder="0">
+                            <span style="color:#fde047; font-weight:bold;">-</span>
+                            <input type="number" min="0" class="score-input" id="s2_${gKey}_${matchIdx}" value="${val2}" placeholder="0">
+                            <button class="${btnClass}" id="btn_${gKey}_${matchIdx}" onclick="saveMatchScore('${gKey}', ${matchIdx})">${btnText}</button>
+                            <button class="btn-warning" onclick="resetMatchScore('${gKey}', ${matchIdx})">🔄 রিসেট</button>
+                        </div>
+                        <span class="match-team right">${m.p2}</span>
+                    </div>`;
+                });
+                finalHtml += `</div>`;
+
+                finalHtml += `<div style="text-align:center; margin-top:20px;">
+                    <button class="btn" style="background:#0284c7;" onclick="proceedLeagueToKnockout()">➡️ লিগ শেষ! শীর্ষ ${leagueQualifyCount} জন নিয়ে নকআউট পর্বে যান</button>
+                </div>`;
+
+                finalHtml += `<div id="knockoutStageContainer" class="hidden"></div>`;
+            }
+
+            document.getElementById('fixtureList').innerHTML = finalHtml;
+            Object.keys(groupMatchesList).forEach(k => updateTableUI(k));
+            if (knockoutRounds.length > 0) {
+                renderAllKnockoutRounds();
+            }
+        }
+
+        function getRoundTitleByPlayerCount(count) {
+            if (count === 2) return "🏆 গ্র্যান্ড ফাইনাল (Final)";
+            if (count <= 4) return "সেমিফাইনাল পর্ব (Semi-Final)";
+            if (count <= 8) return "কোয়ার্টার ফাইনাল (Quarter-Final - Top 8)";
+            if (count <= 16) return "রাউন্ড অফ ১৬ (Round of 16)";
+            return `রাউন্ড অফ ${count} (Knockout Stage)`;
+        }
+
+        function proceedLeagueToKnockout() {
+            let gKey = 'League_Main';
+            let pList = groupPlayersMap[gKey];
+            if (!pList || pList.length < 2) return;
+
+            let leagueQualifyCount = parseInt(document.getElementById('leagueQualifyCount').value) || 4;
+            let stats = {};
+            pList.forEach(pName => { stats[pName] = { name: pName, gf: 0, ga: 0, gd: 0, pts: 0 }; });
+
+            groupMatchesList[gKey].forEach(m => {
+                if (m.played) {
+                    let t1 = stats[m.p1]; let t2 = stats[m.p2];
+                    t1.gf += m.s1; t1.ga += m.s2; t1.gd = t1.gf - t1.ga;
+                    t2.gf += m.s2; t2.ga += m.s1; t2.gd = t2.gf - t2.ga;
+                    if (m.s1 > m.s2) t1.pts += 3;
+                    else if (m.s2 > m.s1) t2.pts += 3;
+                    else { t1.pts += 1; t2.pts += 1; }
+                }
+            });
+
+            let sorted = Object.values(stats).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+            let qualified = sorted.slice(0, leagueQualifyCount).map(s => s.name);
+
+            if (qualified.length < 2) {
+                alert("নকআউট শুরু করার জন্য পর্যাপ্ত প্লেয়ার নেই!");
+                return;
+            }
+
+            let pairedPlayers = [];
+            let half = Math.ceil(qualified.length / 2);
+            for (let i = 0; i < half; i++) {
+                if (qualified[i]) pairedPlayers.push(qualified[i]);
+                if (qualified[qualified.length - 1 - i] && (qualified.length - 1 - i) !== i) {
+                    pairedPlayers.push(qualified[qualified.length - 1 - i]);
+                }
+            }
+
+            knockoutRounds = buildKnockoutRoundsFromPlayers(pairedPlayers);
+
+            renderAllKnockoutRounds();
+            manualSaveData();
+            alert(`লিগ টেবিলের শীর্ষ ${pairedPlayers.length} জন নিয়ে "${knockoutRounds[0].roundName}" বক্স জেনারেট হয়েছে!`);
+        }
+
+        function proceedToKnockoutStage() {
+            let groupKeys = Object.keys(groupPlayersMap);
+            let qualifyPerGroup = parseInt(document.getElementById('qualifyPerGroup').value) || 2;
+            let qualifiedByGroup = [];
+
+            groupKeys.forEach(gKey => {
+                let pList = groupPlayersMap[gKey];
+                let stats = {};
+                pList.forEach(pName => { stats[pName] = { name: pName, gf: 0, ga: 0, gd: 0, pts: 0 }; });
+
+                groupMatchesList[gKey].forEach(m => {
+                    if (m.played) {
+                        let t1 = stats[m.p1]; let t2 = stats[m.p2];
+                        t1.gf += m.s1; t1.ga += m.s2; t1.gd = t1.gf - t1.ga;
+                        t2.gf += m.s2; t2.ga += m.s1; t2.gd = t2.gf - t2.ga;
+                        if (m.s1 > m.s2) t1.pts += 3;
+                        else if (m.s2 > m.s1) t2.pts += 3;
+                        else { t1.pts += 1; t2.pts += 1; }
+                    }
+                });
+
+                let sorted = Object.values(stats).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+                let topPlayers = sorted.slice(0, qualifyPerGroup).map(s => s.name);
+                qualifiedByGroup.push(topPlayers);
+            });
+
+            let pairedPlayers = [];
+            if (qualifiedByGroup.length >= 2) {
+                for (let g = 0; g < qualifiedByGroup.length; g += 2) {
+                    let grp1 = qualifiedByGroup[g] || [];
+                    let grp2 = qualifiedByGroup[g + 1] || [];
+                    if (grp2.length > 0) {
+                        let maxLen = Math.max(grp1.length, grp2.length);
+                        for (let r = 0; r < maxLen; r++) {
+                            let pA = grp1[r];
+                            let pB = grp2[grp2.length - 1 - r];
+                            if (pA) pairedPlayers.push(pA);
+                            if (pB) pairedPlayers.push(pB);
+                        }
+                    } else {
+                        pairedPlayers.push(...grp1);
+                    }
+                }
+            } else if (qualifiedByGroup.length === 1) {
+                let singleGrp = qualifiedByGroup[0];
+                let half = Math.ceil(singleGrp.length / 2);
+                for (let i = 0; i < half; i++) {
+                    if (singleGrp[i]) pairedPlayers.push(singleGrp[i]);
+                    if (singleGrp[singleGrp.length - 1 - i] && (singleGrp.length - 1 - i) !== i) {
+                        pairedPlayers.push(singleGrp[singleGrp.length - 1 - i]);
+                    }
+                }
+            }
+
+            if (pairedPlayers.length < 2) {
+                alert("নকআউট শুরু করার জন্য পর্যাপ্ত কোয়ালিফাইড প্লেয়ার নেই!");
+                return;
+            }
+
+            knockoutRounds = buildKnockoutRoundsFromPlayers(pairedPlayers);
+
+            renderAllKnockoutRounds();
+            manualSaveData();
+            alert(`${groupKeys.length}টি গ্রুপ থেকে ${qualifyPerGroup} জন করে = মোট ${pairedPlayers.length} জন প্লেয়ার নিয়ে "${knockoutRounds[0].roundName}" বক্স জেনারেট হয়েছে!`);
+        }
+
+        function renderAllKnockoutRounds() {
+            let kContainer = document.getElementById('knockoutStageContainer');
+            if(!kContainer) return;
+            kContainer.classList.remove('hidden');
+
+            let totalStartingPlayers = knockoutRounds[0] ? knockoutRounds[0].matches.length * 2 : 0;
+
+            let kHtml = `<div class="knockout-bracket-box">
+                <h3 style="color:#fde047; margin-bottom:12px; text-align:center;">🏆 নকআউট ব্র্যাকেট বক্স (${totalStartingPlayers} প্লেয়ার Knockout)</h3>
+                <div class="bracket-tree-container">`;
+
+            knockoutRounds.forEach((rnd, rIdx) => {
+                kHtml += `<div class="bracket-round-col">
+                    <div style="color:#fde047; font-weight:bold; text-align:center; font-size:13px;">${rnd.roundName}</div>`;
+                
+                rnd.matches.forEach((km, mIdx) => {
+                    let v1 = km.s1 !== null ? km.s1 : '';
+                    let v2 = km.s2 !== null ? km.s2 : '';
+                    let winText = km.winner ? `<div style="color:#fde047; font-size:11px; margin-top:4px; font-weight:bold;">বিজয়ী: ${km.winner}</div>` : '';
+
+                    kHtml += `<div class="bracket-match-node">
+                        <div style="font-size:12px; color:#fde047; margin-bottom:5px;">ম্যাচ #${mIdx+1}</div>
+                        <div class="match-card" style="margin-bottom:5px;">
+                            <span class="match-team left" style="${km.winner === km.p1 ? 'color:#fde047; text-decoration:underline;' : ''}">${km.p1}</span>
+                            <div class="score-controls">
+                                <input type="number" min="0" class="score-input" id="k_s1_${rIdx}_${mIdx}" value="${v1}" placeholder="0"> - 
+                                <input type="number" min="0" class="score-input" id="k_s2_${rIdx}_${mIdx}" value="${v2}" placeholder="0">
+                                <button class="save-score-btn" onclick="saveKnockoutMatch(${rIdx}, ${mIdx})">💾 সেভ</button>
+                                <button class="btn-warning" onclick="resetKnockoutMatch(${rIdx}, ${mIdx})">🔄 রিসেট</button>
+                            </div>
+                            <span class="match-team right" style="${km.winner === km.p2 ? 'color:#fde047; text-decoration:underline;' : ''}">${km.p2}</span>
+                        </div>
+                        ${winText}
+                        <div id="penaltyBox_${rIdx}_${mIdx}" class="${(km.s1 !== null && km.s1 === km.s2 && !km.winner) ? '' : 'hidden'}" style="font-size:11px; color:#fca5a5; margin-top:5px;">
+                            ⚠️ ড্র! পেনাল্টি: <input type="number" class="score-input" id="pen1_${rIdx}_${mIdx}" value="${km.pen1 !== null ? km.pen1 : ''}" style="width:30px;" placeholder="P1"> - 
+                            <input type="number" class="score-input" id="pen2_${rIdx}_${mIdx}" value="${km.pen2 !== null ? km.pen2 : ''}" style="width:30px;" placeholder="P2">
+                            <button class="save-score-btn" style="padding:2px 5px;" onclick="savePenalty(${rIdx}, ${mIdx})">পেনাল্টি সেভ</button>
+                        </div>
+                    </div>`;
+                });
+                kHtml += `</div>`;
+            });
+
+            kHtml += `</div></div>`;
+            kContainer.innerHTML = kHtml;
+        }
+
+        function saveKnockoutMatch(rIdx, mIdx) {
+            let s1 = parseInt(document.getElementById(`k_s1_${rIdx}_${mIdx}`).value);
+            let s2 = parseInt(document.getElementById(`k_s2_${rIdx}_${mIdx}`).value);
+            if (isNaN(s1) || isNaN(s2)) { alert("দয়া করে উভয় দলের গোল সংখ্যা দিন!"); return; }
+
+            let km = knockoutRounds[rIdx].matches[mIdx];
+            km.s1 = s1; km.s2 = s2;
+
+            if (s1 > s2) {
+                km.winner = km.p1;
+                document.getElementById(`penaltyBox_${rIdx}_${mIdx}`).classList.add('hidden');
+                alert(`বিজয়ী: ${km.p1}!`);
+                advanceKnockoutWinners(rIdx);
+            } else if (s2 > s1) {
+                km.winner = km.p2;
+                document.getElementById(`penaltyBox_${rIdx}_${mIdx}`).classList.add('hidden');
+                alert(`বিজয়ী: ${km.p2}!`);
+                advanceKnockoutWinners(rIdx);
+            } else {
+                document.getElementById(`penaltyBox_${rIdx}_${mIdx}`).classList.remove('hidden');
+                alert("ম্যাচ ড্র! পেনাল্টি স্কোর দিন।");
+            }
+        }
+
+        function resetKnockoutMatch(rIdx, mIdx) {
+            if (confirm("নকআউট ম্যাচের স্কোর রিসেট করতে চান?")) {
+                let km = knockoutRounds[rIdx].matches[mIdx];
+                km.s1 = null; km.s2 = null; km.pen1 = null; km.pen2 = null; km.winner = null;
+                knockoutRounds.splice(rIdx + 1);
+                renderAllKnockoutRounds();
+                manualSaveData();
+                alert("নকআউট ম্যাচ রিসেট করা হয়েছে।");
+            }
+        }
+
+        function savePenalty(rIdx, mIdx) {
+            let p1 = parseInt(document.getElementById(`pen1_${rIdx}_${mIdx}`).value);
+            let p2 = parseInt(document.getElementById(`pen2_${rIdx}_${mIdx}`).value);
+            if (isNaN(p1) || isNaN(p2) || p1 === p2) { alert("সঠিক পেনাল্টি স্কোর দিন!"); return; }
+
+            let km = knockoutRounds[rIdx].matches[mIdx];
+            km.pen1 = p1; km.pen2 = p2;
+            km.winner = p1 > p2 ? km.p1 : km.p2;
+            alert(`পেনাল্টিতে বিজয়ী: ${km.winner}!`);
+            advanceKnockoutWinners(rIdx);
+        }
+
+        function advanceKnockoutWinners(rIdx) {
+            let currentRound = knockoutRounds[rIdx];
+            let allFinished = currentRound.matches.every(m => m.winner !== null);
+            if (!allFinished) {
+                renderAllKnockoutRounds();
+                manualSaveData();
+                return;
+            }
+
+            let winners = currentRound.matches.map(m => m.winner);
+
+            if (winners.length > 1) {
+                let nextMatches = [];
+                for (let i = 0; i < winners.length; i += 2) {
+                    if (i + 1 < winners.length) {
+                        nextMatches.push({
+                            p1: winners[i],
+                            p2: winners[i+1],
+                            s1: null, s2: null, pen1: null, pen2: null, winner: null
+                        });
+                    } else {
+                        nextMatches.push({
+                            p1: winners[i],
+                            p2: "BYE (অটো কোয়ালিফাই)",
+                            s1: 1, s2: 0, pen1: null, pen2: null, winner: winners[i]
+                        });
+                    }
+                }
+                
+                let nextRoundName = getRoundTitleByPlayerCount(winners.length);
+                
+                if (knockoutRounds.length <= rIdx + 1) {
+                    knockoutRounds.push({ roundName: nextRoundName, matches: nextMatches });
+                } else {
+                    knockoutRounds[rIdx + 1] = { roundName: nextRoundName, matches: nextMatches };
+                    knockoutRounds.splice(rIdx + 2);
+                }
+
+                renderAllKnockoutRounds();
+                manualSaveData();
+                alert(`অভিনন্দন! বিজয়ী প্লেয়াররা পরবর্তী (${nextRoundName}) পর্বে উন্নীত হয়েছেন।`);
+            } else if (winners.length === 1) {
+                renderAllKnockoutRounds();
+                manualSaveData();
+                triggerChampionCelebration(winners[0]);
+            }
+        }
+
+        function triggerChampionCelebration(championName) {
+            document.getElementById('championTitle').innerText = `অভিনন্দন ${championName}!`;
+            document.getElementById('championDesc').innerText = `🏆 ${tournamentData.name} এর অফিসিয়াল টুর্নামেন্ট চ্যাম্পিয়ন! 🎉`;
+            document.getElementById('championModal').classList.remove('hidden');
+        }
+
+        function closeChampionModal() {
+            document.getElementById('championModal').classList.add('hidden');
+        }
+
+        function downloadCelebrationVideo() {
+            let winnerName = "";
+            if (knockoutRounds.length > 0) {
+                let lastRnd = knockoutRounds[knockoutRounds.length - 1];
+                if (lastRnd.matches.length === 1 && lastRnd.matches[0].winner) {
+                    winnerName = lastRnd.matches[0].winner;
+                }
+            }
+            let textData = `🏆 TOURNAMENT CHAMPION CERTIFICATE 🏆\nTournament: ${tournamentData.name}\nOrganizer: ${tournamentData.organizer}\nWinner Champion: ${winnerName}\nCongratulations! 🎉`;
+            let blob = new Blob([textData], { type: 'text/plain;charset=utf-8' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `${tournamentData.name}_Champion_${winnerName}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            alert("📥 চ্যাম্পিয়ন সেলিব্রেশন সার্টিফিকেট ফাইল সফলভাবে ডাউনলোড হয়েছে!");
+        }
+
+        function saveMatchScore(gKey, matchIdx) {
+            let s1Input = document.getElementById(`s1_${gKey}_${matchIdx}`);
+            let s2Input = document.getElementById(`s2_${gKey}_${matchIdx}`);
+            
+            if (s1Input.value === "" || s2Input.value === "") {
+                alert("দয়া করে উভয় দলের গোল সংখ্যা বসান!");
+                return;
+            }
+
+            let score1 = parseInt(s1Input.value) || 0;
+            let score2 = parseInt(s2Input.value) || 0;
+
+            let match = groupMatchesList[gKey][matchIdx];
+            match.s1 = score1;
+            match.s2 = score2;
+            match.played = true;
+
+            let btn = document.getElementById(`btn_${gKey}_${matchIdx}`);
+            btn.innerText = "✅ সেভড";
+            btn.classList.add('saved');
+
+            updateTableUI(gKey);
+            manualSaveData();
+            alert("স্কোর সফলভাবে সেভ ও পয়েন্ট আপডেট হয়েছে!");
+        }
+
+        function resetMatchScore(gKey, matchIdx) {
+            if (confirm("আপনি কি এই ম্যাচের স্কোর রিসেট করতে চান?")) {
+                let match = groupMatchesList[gKey][matchIdx];
+                match.s1 = null;
+                match.s2 = null;
+                match.played = false;
+
+                document.getElementById(`s1_${gKey}_${matchIdx}`).value = "";
+                document.getElementById(`s2_${gKey}_${matchIdx}`).value = "";
+
+                let btn = document.getElementById(`btn_${gKey}_${matchIdx}`);
+                btn.innerText = "💾 সেভ";
+                btn.classList.remove('saved');
+
+                updateTableUI(gKey);
+                manualSaveData();
+                alert("স্কোর রিসেট করা হয়েছে। এখন নতুন স্কোর বসাতে পারেন।");
+            }
+        }
+
+        function updateTableUI(gKey) {
+            let pList = groupPlayersMap[gKey];
+            if (!pList) return;
+
+            let qualifyPerGroup = parseInt(document.getElementById('qualifyPerGroup').value) || 2;
+            let leagueQualifyCount = parseInt(document.getElementById('leagueQualifyCount').value) || 4;
+            let qualLimit = gKey === 'League_Main' ? leagueQualifyCount : qualifyPerGroup;
+
+            let stats = {};
+            pList.forEach(pName => {
+                stats[pName] = { name: pName, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 };
+            });
+
+            groupMatchesList[gKey].forEach(m => {
+                if (m.played) {
+                    let t1 = stats[m.p1];
+                    let t2 = stats[m.p2];
+
+                    t1.mp += 1; t2.mp += 1;
+                    t1.gf += m.s1; t1.ga += m.s2;
+                    t2.gf += m.s2; t2.ga += m.s1;
+                    t1.gd = t1.gf - t1.ga;
+                    t2.gd = t2.gf - t2.ga;
+
+                    if (m.s1 > m.s2) { t1.w += 1; t1.pts += 3; t2.l += 1; }
+                    else if (m.s2 > m.s1) { t2.w += 1; t2.pts += 3; t1.l += 1; }
+                    else { t1.d += 1; t1.pts += 1; t2.d += 1; t2.pts += 1; }
+                }
+            });
+
+            let sortedStandings = Object.values(stats).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+
+            let tableBody = document.querySelector(`#table-${gKey} tbody`);
+            if (!tableBody) return;
+
+            let rowsHtml = "";
+            sortedStandings.forEach((p, idx) => {
+                let gdDisplay = p.gd > 0 ? `+${p.gd}` : `${p.gd}`;
+                let gdColor = p.gd > 0 ? '#86efac' : (p.gd < 0 ? '#fca5a5' : '#ffffff');
+                let isQ = idx < qualLimit ? 'qualified-row' : '';
+                let qMark = idx < qualLimit ? ' ⭐' : '';
+                
+                rowsHtml += `<tr class="${isQ}">
+                    <td><strong>${idx + 1}</strong></td>
+                    <td style="text-align:left; font-weight:bold;">${p.name}${qMark}</td>
+                    <td>${p.mp}</td>
+                    <td style="color:#86efac; font-weight:bold;">${p.w}</td>
+                    <td>${p.d}</td>
+                    <td style="color:#fca5a5;">${p.l}</td>
+                    <td style="color:${gdColor}; font-weight:bold;">${gdDisplay}</td>
+                    <td style="color:#fde047; font-weight:bold; font-size:13px;">${p.pts}</td>
+                </tr>`;
+            });
+            tableBody.innerHTML = rowsHtml;
+        }
+    </script>
+
+</body>
+</html>
