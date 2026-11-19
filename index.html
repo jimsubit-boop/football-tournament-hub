@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ফুটবল টুর্নামেন্ট হোস্টিং প্ল্যাটফর্ম</title>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -84,6 +86,7 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.7);
         }
         .btn:hover { background-color: #ff3b52; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
         .btn-secondary { background-color: #0284c7; }
         .btn-secondary:hover { background-color: #0ea5e9; }
         .btn-accent { background-color: #eab308; color: #061410; text-shadow: none; }
@@ -115,6 +118,18 @@
         }
         input::placeholder, textarea::placeholder { color: #94a3b8; }
         .hidden { display: none !important; }
+
+        .auth-status-badge {
+            background: rgba(2, 12, 9, 0.9);
+            border: 1px solid #38bdf8;
+            color: #fde047;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
 
         .card-box {
             background-color: rgba(2, 12, 9, 0.86);
@@ -429,39 +444,44 @@
         <button class="btn" onclick="showRegisterSection()">📢 নতুন টুর্নামেন্ট তৈরি করুন (Partner)</button>
     </div>
 
-    <!-- ধাপ ২: পার্টনার অ্যাকাউন্ট রেজিস্ট্রেশন -->
+    <!-- ধাপ ২: পার্টনার লগইন / রেজিস্ট্রেশন -->
     <div id="register-section" class="container hidden">
-        <h2>🔐 পার্টনার অ্যাকাউন্ট তৈরি করুন</h2>
-        <p class="info-text">টুর্নামেন্ট হোস্ট করার জন্য আপনার জিমেইল দিয়ে ফ্রি অ্যাকাউন্ট খুলুন।</p>
+        <h2>🔐 পার্টনার লগইন / অ্যাকাউন্ট</h2>
+        <p class="info-text">প্রথমবার হলে নতুন পাসওয়ার্ড সেট হবে; আগের অ্যাকাউন্ট থাকলে সেভ করা পাসওয়ার্ডই দিতে হবে।</p>
         
         <div class="form-group">
             <label>আপনার জিমেইল (Gmail):</label>
-            <input type="email" id="userEmail" placeholder="যেমন: example@gmail.com">
+            <input type="email" id="userEmail" placeholder="যেমন: example@gmail.com" oninput="checkExistingEmailHint()">
         </div>
+
+        <div id="emailAccountHint" class="auth-status-badge hidden"></div>
 
         <div class="form-group">
             <label>পাসওয়ার্ড (Password):</label>
             <input type="password" id="userPassword" placeholder="কমপক্ষে ৬ ডিজিটের পাসওয়ার্ড দিন">
         </div>
 
-        <button class="btn" onclick="sendVerificationCode()">📧 ভেরিফিকেশন কোড পাঠান</button>
+        <button class="btn" id="sendOtpBtn" onclick="sendVerificationCode()">📧 ভেরিফিকেশন কোড পাঠান</button>
+        <button class="btn btn-secondary" onclick="backToHomeFromAuth()">🔙 হোম পেজে ফিরুন</button>
     </div>
 
     <!-- ধাপ ৩: ওটিপি ভেরিফিকেশন -->
     <div id="verify-section" class="container hidden">
         <h2>🛡️ একাউন্ট ভেরিফিকেশন</h2>
-        <p class="info-text">আপনার জিমেইলে একটি ৪ ডিজিটের কোড পাঠানো হয়েছে।</p>
+        <p class="info-text" id="otpSentInfo">আপনার জিমেইলে একটি ৬ ডিজিটের ভেরিফিকেশন কোড পাঠানো হয়েছে।</p>
         
-        <div style="background: #020c09; padding: 10px; text-align: center; border-radius: 6px; margin-bottom: 15px; color: #fde047; font-weight: bold; border: 1px solid rgba(255,255,255,0.2);">
+        <!-- EmailJS কনফিগার না থাকলে ডেমো কোড দেখাবে; EmailJS কাজ করলে ইমেইলে কোড যাবে -->
+        <div id="demoOtpBox" style="background: #020c09; padding: 10px; text-align: center; border-radius: 6px; margin-bottom: 15px; color: #fde047; font-weight: bold; border: 1px solid rgba(255,255,255,0.2);">
             ডেমো ওটিপি কোড: <span id="generatedOtp" style="font-size: 18px; letter-spacing: 2px;"></span>
         </div>
 
         <div class="form-group">
-            <label>৪ ডিজিটের ভেরিফিকেশন কোড লিখুন:</label>
-            <input type="text" id="enteredOtp" placeholder="যেমন: 1234" maxlength="4">
+            <label>৬ ডিজিটের ভেরিফিকেশন কোড লিখুন:</label>
+            <input type="text" id="enteredOtp" placeholder="যেমন: 123456" maxlength="6">
         </div>
 
         <button class="btn" onclick="verifyOtp()">✅ অ্যাকাউন্ট ভেরিফাই করুন</button>
+        <button class="btn btn-secondary" id="resendOtpBtn" onclick="sendVerificationCode()">🔄 কোড আবার পাঠান</button>
     </div>
 
     <!-- জিমেইল লগইনের পরের ইন্টারফেস: কন্টিনিউ নাকি নতুন টুর্নামেন্ট? -->
@@ -574,7 +594,7 @@
                 </div>
             </div>
             
-            <!-- গ্রুপ স্টেজ + নকআউট অপশন বক্স (A, A-B, A-B-C-D, A-B-C-D-E-F-G-H + প্রতি গ্রুপে কয়জন করে উঠবে) -->
+            <!-- গ্রুপ স্টেজ + নকআউট অপশন বক্স -->
             <div id="groupCountBox" class="hidden" style="margin-top: 15px; background: rgba(2, 12, 9, 0.9); padding: 14px; border-radius: 8px; border: 1px solid #fde047;">
                 <div class="form-group">
                     <label style="color: #fde047; margin-bottom: 5px;">কয়টি গ্রুপ করতে চান? (Group Format)</label>
@@ -648,7 +668,7 @@
     <div id="confirmYesNoModal" class="hidden">
         <div class="modal-box">
             <h3 style="color: #fde047; margin-bottom: 10px;">⚠️ বের হতে চান?</h3>
-            <p style="color: #ffffff; font-size: 14px; margin-bottom: 10px;">আপনি কি নিশ্চিতভাবে এখান থেকে বের হতে চান? (হ্যাঁ দিলে সমস্ত সেভ ডাটা মুছে যাবে)</p>
+            <p style="color: #ffffff; font-size: 14px; margin-bottom: 10px;">আপনি কি নিশ্চিতভাবে এখান থেকে বের হতে চান? (হ্যাঁ দিলে টুর্নামেন্টের সেভ ডাটা মুছে যাবে)</p>
             <div class="yes-no-row">
                 <button class="btn btn-danger" onclick="confirmFullExitYes()">✅ হ্যাঁ (Yes)</button>
                 <button class="btn btn-secondary" onclick="cancelFullExitNo()">❌ না (No)</button>
@@ -697,7 +717,20 @@
     </div>
 
     <script>
+        // ============================================================
+        // EmailJS কনফিগারেশন (নিজের Public Key, Service ID, Template ID বসান)
+        // ============================================================
+        const EMAILJS_CONFIG = {
+            publicKey: "YOUR_EMAILJS_PUBLIC_KEY",
+            serviceId: "YOUR_EMAILJS_SERVICE_ID",
+            templateId: "YOUR_EMAILJS_TEMPLATE_ID"
+        };
+
+        const USERS_STORAGE_KEY = "football_tournament_users_v1";
+
         let correctOtp = "";
+        let pendingEmail = "";
+        let pendingPassword = "";
         let loggedInEmail = "";
         let tournamentData = { name: "", organizer: "", format: "", formatValue: "", maxPlayers: 4 };
         let registeredPlayers = [];
@@ -709,8 +742,61 @@
         const GROUP_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
         window.onload = function() {
+            if (EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY" && window.emailjs) {
+                emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+            }
             document.getElementById('home-section').classList.remove('hidden');
         };
+
+        // সহজ ও নিরাপদ হ্যাশ ফাংশন (প্লেইন পাসওয়ার্ড localStorage-এ না রাখার জন্য)
+        function hashPassword(str) {
+            let hash = 2166136261;
+            for (let i = 0; i < str.length; i++) {
+                hash ^= str.charCodeAt(i);
+                hash = Math.imul(hash, 16777619);
+            }
+            return (hash >>> 0).toString(16);
+        }
+
+        function getSavedUsers() {
+            try {
+                return JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || "{}");
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveUserAccount(email, password) {
+            const key = email.trim().toLowerCase();
+            const users = getSavedUsers();
+            users[key] = {
+                email: email.trim(),
+                passwordHash: hashPassword(password),
+                updatedAt: new Date().toISOString()
+            };
+            localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+        }
+
+        function checkExistingEmailHint() {
+            const emailVal = document.getElementById('userEmail').value.trim().toLowerCase();
+            const hintBox = document.getElementById('emailAccountHint');
+            if (!emailVal || !emailVal.includes('@')) {
+                hintBox.classList.add('hidden');
+                return;
+            }
+            const users = getSavedUsers();
+            hintBox.classList.remove('hidden');
+            if (users[emailVal]) {
+                hintBox.innerText = "🔒 এই জিমেইলের অ্যাকাউন্ট আগে থেকেই সেভ করা আছে — পুরনো সঠিক পাসওয়ার্ড দিন।";
+            } else {
+                hintBox.innerText = "✨ নতুন জিমেইল — যে পাসওয়ার্ড দেবেন, পরবর্তীতে এটাই সেভ হয়ে থাকবে।";
+            }
+        }
+
+        function backToHomeFromAuth() {
+            document.getElementById('register-section').classList.add('hidden');
+            document.getElementById('home-section').classList.remove('hidden');
+        }
 
         function clearAllTournamentState() {
             localStorage.removeItem('football_tournament_app_data');
@@ -779,25 +865,96 @@
         function showRegisterSection() {
             document.getElementById('home-section').classList.add('hidden');
             document.getElementById('register-section').classList.remove('hidden');
+            checkExistingEmailHint();
         }
 
-        function sendVerificationCode() {
+        async function sendVerificationCode() {
             const email = document.getElementById('userEmail').value.trim();
-            const password = document.getElementById('userPassword').value.trim();
-            if (!email || !email.includes('@')) { alert("দয়া করে সঠিক জিমেইল দিন!"); return; }
-            if (!password || password.length < 6) { alert("পাসওয়ার্ড কমপক্ষে ৬ ডিজিটের হতে হবে!"); return; }
-            
-            loggedInEmail = email;
-            correctOtp = Math.floor(1000 + Math.random() * 9000).toString();
-            document.getElementById('generatedOtp').innerText = correctOtp;
+            const password = document.getElementById('userPassword').value;
+            const sendBtn = document.getElementById('sendOtpBtn');
+
+            if (!email || !email.includes('@')) {
+                alert("দয়া করে সঠিক জিমেইল দিন!");
+                return;
+            }
+            if (!password || password.length < 6) {
+                alert("পাসওয়ার্ড কমপক্ষে ৬ ডিজিটের হতে হবে!");
+                return;
+            }
+
+            // আগে থেকে এই জিমেইল সেভ করা থাকলে পাসওয়ার্ড যাচাই করুন
+            const normalizedEmail = email.toLowerCase();
+            const users = getSavedUsers();
+            if (users[normalizedEmail]) {
+                if (users[normalizedEmail].passwordHash !== hashPassword(password)) {
+                    alert("❌ ভুল পাসওয়ার্ড! এই জিমেইলের জন্য আগে যে পাসওয়ার্ড সেভ করা হয়েছিল, সেটিই দিতে হবে।");
+                    return;
+                }
+            }
+
+            pendingEmail = email;
+            pendingPassword = password;
+            correctOtp = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('enteredOtp').value = "";
+
+            const isEmailJsReady =
+                EMAILJS_CONFIG.publicKey &&
+                EMAILJS_CONFIG.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY" &&
+                EMAILJS_CONFIG.serviceId !== "YOUR_EMAILJS_SERVICE_ID" &&
+                EMAILJS_CONFIG.templateId !== "YOUR_EMAILJS_TEMPLATE_ID" &&
+                window.emailjs;
+
+            if (isEmailJsReady) {
+                try {
+                    sendBtn.disabled = true;
+                    sendBtn.innerText = "📤 জিমেইলে কোড পাঠানো হচ্ছে...";
+
+                    await emailjs.send(
+                        EMAILJS_CONFIG.serviceId,
+                        EMAILJS_CONFIG.templateId,
+                        {
+                            to_email: email,
+                            otp_code: correctOtp,
+                            app_name: "ফুটবল টুর্নামেন্ট হাব"
+                        }
+                    );
+
+                    document.getElementById('otpSentInfo').innerText = `✅ ${email} ঠিকানায় ৬ ডিজিটের ভেরিফিকেশন কোড পাঠানো হয়েছে। ইনবক্স বা স্প্যাম ফোল্ডার চেক করুন।`;
+                    document.getElementById('demoOtpBox').classList.add('hidden');
+                    alert(`ভেরিফিকেশন কোড ${email} এ পাঠানো হয়েছে!`);
+                } catch (err) {
+                    console.error("EmailJS Error:", err);
+                    document.getElementById('otpSentInfo').innerText = `⚠️ ইমেইল পাঠাতে সমস্যা হয়েছে। নিচের কোডটি ব্যবহার করুন:`;
+                    document.getElementById('demoOtpBox').classList.remove('hidden');
+                    document.getElementById('generatedOtp').innerText = correctOtp;
+                    alert("ইমেইল পাঠাতে সমস্যা হয়েছে (EmailJS ID/Domain চেক করুন)। আপাতত স্ক্রিনের ওটিপি কোড ব্যবহার করতে পারেন।");
+                } finally {
+                    sendBtn.disabled = false;
+                    sendBtn.innerText = "📧 ভেরিফিকেশন কোড পাঠান";
+                }
+            } else {
+                // EmailJS Key এখনো না বসালে যেন কাজ আটকে না যায়
+                document.getElementById('otpSentInfo').innerText = `আপনার জিমেইল (${email}) এর জন্য ভেরিফিকেশন কোড তৈরি হয়েছে:`;
+                document.getElementById('demoOtpBox').classList.remove('hidden');
+                document.getElementById('generatedOtp').innerText = correctOtp;
+            }
+
             document.getElementById('register-section').classList.add('hidden');
             document.getElementById('verify-section').classList.remove('hidden');
         }
 
         function verifyOtp() {
             const userOtp = document.getElementById('enteredOtp').value.trim();
-            if (userOtp !== correctOtp) { alert("ভুল ওটিপি কোড!"); return; }
-            
+            if (!userOtp || userOtp !== correctOtp) {
+                alert("❌ ভুল ওটিপি কোড! সঠিক কোডটি লিখুন।");
+                return;
+            }
+
+            // প্রথমবার লগইন হলে পাসওয়ার্ড সেভ করে রাখবে; আগে থেকে থাকলে সেটাই বহাল থাকবে
+            saveUserAccount(pendingEmail, pendingPassword);
+            loggedInEmail = pendingEmail;
+            document.getElementById('userPassword').value = "";
+
             document.getElementById('verify-section').classList.add('hidden');
 
             let savedData = localStorage.getItem('football_tournament_app_data');
@@ -1744,4 +1901,4 @@
     </script>
 
 </body>
-          </html>
+</html>
